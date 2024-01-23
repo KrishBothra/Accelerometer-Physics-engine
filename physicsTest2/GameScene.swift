@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import CoreMotion
 
 class GameScene: SKScene {
     
@@ -15,10 +16,12 @@ class GameScene: SKScene {
     
     var startTouch = CGPoint()
     var endTouch = CGPoint()
+    var motionManager: CMMotionManager!
+
     
     override func didMove(to view: SKView) {
         
-        backgroundColor = .gray
+        backgroundColor = .lightGray
         player.strokeColor = .black
         player.fillColor = .black
         player.physicsBody = SKPhysicsBody(circleOfRadius: 16)
@@ -34,8 +37,12 @@ class GameScene: SKScene {
         terrain.physicsBody?.isDynamic = false
         terrain.position = .init(x:0, y:0)
         
+        
+        motionManager = CMMotionManager()
+        motionManager.startAccelerometerUpdates()
+        
         addChild(terrain)
-    
+        
     }
     
     
@@ -67,7 +74,7 @@ class GameScene: SKScene {
         }
         
         player.position = .init(x:0, y:200)
-
+        resetGravityOfPhysicsWorldToZero()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -77,5 +84,19 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+#if targetEnvironment(simulator)
+    if let currentTouch = lastTouchPosition {
+        let diff = CGPoint(x: currentTouch.x - player.position.x, y: currentTouch.y - player.position.y)
+        physicsWorld.gravity = CGVector(dx: diff.x / 100, dy: diff.y / 100)
+    }
+#else
+    if let accelerometerData = motionManager.accelerometerData {
+        physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.x * 1, dy: accelerometerData.acceleration.y * 1)
+    }
+#endif
+    }
+    
+    func resetGravityOfPhysicsWorldToZero() {
+        physicsWorld.gravity = .zero
     }
 }
