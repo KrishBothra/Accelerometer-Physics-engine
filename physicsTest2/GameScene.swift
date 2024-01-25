@@ -11,22 +11,39 @@ import CoreMotion
 
 class GameScene: SKScene {
     
-    let player = SKShapeNode(circleOfRadius: 16)
+    var player: SKSpriteNode!
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
     
     var startTouch = CGPoint()
     var endTouch = CGPoint()
     var motionManager: CMMotionManager!
+    
+    
+    var screenWidth: CGFloat {
+            return UIScreen.main.bounds.width
+        }
+
+    var screenHeight: CGFloat {
+        return UIScreen.main.bounds.height
+    }
 
     
     override func didMove(to view: SKView) {
-        
+        self.backgroundColor = .lightGray
+            
+            // Set the scale mode to .aspectFit
+        self.scaleMode = .aspectFit
+            
+            // Create a physics body representing an edge loop from the scene's frame
+        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        resetGravityOfPhysicsWorldToZero()
         backgroundColor = .lightGray
-        player.strokeColor = .black
-        player.fillColor = .black
-        player.physicsBody = SKPhysicsBody(circleOfRadius: 16)
+        player = SKSpriteNode(imageNamed: "Marble")
+        player.size = CGSize(width: 75, height: 75)
+        player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
         player.physicsBody?.affectedByGravity = true
         player.physicsBody?.isDynamic = true
+        player.physicsBody?.allowsRotation = true;
         player.position = .init(x:0, y:200)
         addChild(player)
         
@@ -91,9 +108,11 @@ class GameScene: SKScene {
     }
 #else
     if let accelerometerData = motionManager.accelerometerData {
-        physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.x * 1, dy: accelerometerData.acceleration.y * 1)
+        physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.x * 7, dy: accelerometerData.acceleration.y * 0)
     }
 #endif
+        
+       
     }
     
     func resetGravityOfPhysicsWorldToZero() {
