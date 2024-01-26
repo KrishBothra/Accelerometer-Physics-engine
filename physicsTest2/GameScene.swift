@@ -12,6 +12,8 @@ import CoreMotion
 class GameScene: SKScene {
     
     var player: SKSpriteNode!
+    var spike: SKSpriteNode!
+
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
     
     var startTouch = CGPoint()
@@ -41,18 +43,27 @@ class GameScene: SKScene {
         player = SKSpriteNode(imageNamed: "Marble")
         player.size = CGSize(width: 75, height: 75)
         player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
-        player.physicsBody?.affectedByGravity = true
+        player.physicsBody?.affectedByGravity = false
         player.physicsBody?.isDynamic = true
         player.physicsBody?.allowsRotation = true;
-        player.position = .init(x:0, y:200)
+        player.position = .init(x:0, y:0)
         addChild(player)
+        
+        spike = SKSpriteNode(imageNamed: "Spike")
+        spike.size = CGSize(width: 75, height: 75)
+        spike.physicsBody = SKPhysicsBody(circleOfRadius: 14)
+        spike.physicsBody?.affectedByGravity = true
+        spike.physicsBody?.isDynamic = true
+        spike.physicsBody?.allowsRotation = false;
+        spike.position = .init(x:0, y:200)
+        addChild(spike)
         
         terrain.strokeColor = .black
         terrain.fillColor = .black
         terrain.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 30))
         terrain.physicsBody?.affectedByGravity = false
         terrain.physicsBody?.isDynamic = false
-        terrain.position = .init(x:0, y:0)
+        terrain.position = .init(x:0, y:-200)
         
         
         motionManager = CMMotionManager()
@@ -90,8 +101,9 @@ class GameScene: SKScene {
             endTouch = touch.location(in: self)
         }
         
-        player.position = .init(x:0, y:200)
-        resetGravityOfPhysicsWorldToZero()
+        player.position = .init(x:0, y:0)
+        spike.position = .init(x: 0, y: 200)
+//        resetGravityOfPhysicsWorldToZero()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -108,7 +120,25 @@ class GameScene: SKScene {
     }
 #else
     if let accelerometerData = motionManager.accelerometerData {
-        physicsWorld.gravity = CGVector(dx: accelerometerData.acceleration.x * 7, dy: accelerometerData.acceleration.y * 0)
+        let accelerationVector = CGVector(dx: accelerometerData.acceleration.x * 75, dy: accelerometerData.acceleration.y * 0)
+
+            // Apply the vector directly to the player's position
+            player.position.x += accelerationVector.dx
+
+            // Get the size of the scene
+            let sceneSize = self.size
+
+            // Clamp the player's position to stay within the bounds of the scene
+        if player.position.x>361.8 {
+            player.position.x = 361.8
+        }
+        else if player.position.x<(-361.8){
+            player.position.x = (-361.8)
+        }
+        print("Player Position: \(player.position)")
+
+//        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
+            player.position.y = max(min(player.position.y, sceneSize.height), 0)
     }
 #endif
         
@@ -116,6 +146,6 @@ class GameScene: SKScene {
     }
     
     func resetGravityOfPhysicsWorldToZero() {
-        physicsWorld.gravity = .zero
+//        physicsWorld.gravity = .zero
     }
 }
