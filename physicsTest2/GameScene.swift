@@ -9,10 +9,10 @@ import SpriteKit
 import GameplayKit
 import CoreMotion
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    var player: SKSpriteNode!
-    var spike: SKSpriteNode!
+    var player = SKSpriteNode()
+    var spike = SKSpriteNode()
 
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
     
@@ -21,23 +21,19 @@ class GameScene: SKScene {
     var motionManager: CMMotionManager!
     
     
-    var screenWidth: CGFloat {
-            return UIScreen.main.bounds.width
-        }
-
-    var screenHeight: CGFloat {
-        return UIScreen.main.bounds.height
-    }
 
     
     override func didMove(to view: SKView) {
+        self.physicsWorld.contactDelegate = self
+
         self.backgroundColor = .lightGray
-            
+
             // Set the scale mode to .aspectFit
         self.scaleMode = .aspectFit
             
             // Create a physics body representing an edge loop from the scene's frame
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+    
         resetGravityOfPhysicsWorldToZero()
         backgroundColor = .lightGray
         player = SKSpriteNode(imageNamed: "Marble")
@@ -47,6 +43,10 @@ class GameScene: SKScene {
         player.physicsBody?.isDynamic = true
         player.physicsBody?.allowsRotation = true;
         player.position = .init(x:0, y:0)
+        player.physicsBody?.categoryBitMask = PhysicsCategory.player
+        player.physicsBody?.collisionBitMask = PhysicsCategory.spike
+        player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+        
         addChild(player)
         
         spike = SKSpriteNode(imageNamed: "Spike")
@@ -56,6 +56,8 @@ class GameScene: SKScene {
         spike.physicsBody?.isDynamic = true
         spike.physicsBody?.allowsRotation = false;
         spike.position = .init(x:0, y:200)
+        spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
+
         addChild(spike)
         
         terrain.strokeColor = .black
@@ -73,6 +75,26 @@ class GameScene: SKScene {
         
     }
     
+    func didBegin(_ contact: SKPhysicsContact) {
+        var firstBody = SKPhysicsBody()
+        var secondBody = SKPhysicsBody()
+        print("Contact Detected")
+
+        
+        if contact.bodyA.node?.name == "player" {
+            
+            firstBody = contact.bodyA
+            secondBody = contact.bodyB
+        } else {
+            firstBody = contact.bodyB
+            secondBody = contact.bodyA
+        }
+        
+        if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
+            print("Contact Detected")
+        }
+        
+    }
     
     func touchDown(_ touches: Set<UITouch>, with event: UIEvent) {
         
@@ -135,12 +157,14 @@ class GameScene: SKScene {
         else if player.position.x<(-361.8){
             player.position.x = (-361.8)
         }
-        print("Player Position: \(player.position)")
+//        print("Player Position: \(player.position)")
 
 //        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
             player.position.y = max(min(player.position.y, sceneSize.height), 0)
     }
 #endif
+        
+        
         
        
     }

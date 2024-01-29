@@ -8,48 +8,16 @@
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
             uuid = "035D3A7A-346D-413A-94DF-D417EC183393"
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "physicsTest2/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
+            startingLineNumber = "116"
+            endingLineNumber = "116"
             landmarkName = "GameScene"
             landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "035D3A7A-346D-413A-94DF-D417EC183393 - 5f853a3b65e9bb70"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "physicsTest2.GameScene.touchesEnded(_: Swift.Set&lt;__C.UITouch&gt;, with: Swift.Optional&lt;__C.UIEvent&gt;) -&gt; ()"
-                  moduleName = "physicsTest2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krishbothra/Desktop/Xcode/physicsTest2/physicsTest2/GameScene.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "93"
-                  endingLineNumber = "93"
-                  offsetFromSymbolStart = "368">
-               </Location>
-               <Location
-                  uuid = "035D3A7A-346D-413A-94DF-D417EC183393 - 125f8de6efefe997"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "physicsTest2.GameScene.touchesMoved(_: Swift.Set&lt;__C.UITouch&gt;, with: Swift.Optional&lt;__C.UIEvent&gt;) -&gt; ()"
-                  moduleName = "physicsTest2"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/krishbothra/Desktop/Xcode/physicsTest2/physicsTest2/GameScene.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "97"
-                  endingLineNumber = "97"
-                  offsetFromSymbolStart = "28">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

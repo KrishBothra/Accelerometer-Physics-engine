@@ -15,6 +15,7 @@
 		4D3E2AA92B5B0C2A006219C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AA72B5B0C2A006219C3 /* Main.storyboard */; };
 		4D3E2AAB2B5B0C2C006219C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */; };
 		4D3E2AAE2B5B0C2C006219C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */; };
+		4D50CCA22B683BE3003EBF43 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		4D3E2AA82B5B0C2A006219C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D3E2AAD2B5B0C2C006219C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 				4D3E2AA72B5B0C2A006219C3 /* Main.storyboard */,
 				4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */,
 				4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */,
+				4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */,
 			);
 			path = physicsTest2;
 			sourceTree = "<group>";
@@ -145,6 +148,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D3E2AA42B5B0C2A006219C3 /* GameScene.swift in Sources */,
+				4D50CCA22B683BE3003EBF43 /* PhysicsCategory.swift in Sources */,
 				4D3E2AA62B5B0C2A006219C3 /* GameViewController.swift in Sources */,
 				4D3E2A9E2B5B0C2A006219C3 /* AppDelegate.swift in Sources */,
 			);
