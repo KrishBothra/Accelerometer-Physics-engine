@@ -21,6 +21,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var motionManager: CMMotionManager!
     
     var changePos = false;
+    var timer: Timer?
     
     
 
@@ -52,24 +53,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         addChild(player)
         
-        spike = SKSpriteNode(imageNamed: "Spike")
-        spike.size = CGSize(width: 75, height: 75)
-        spike.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
-        spike.physicsBody?.affectedByGravity = true
-        spike.physicsBody?.isDynamic = true
-        spike.physicsBody?.allowsRotation = false;
-        spike.position = .init(x:0, y:200)
-        spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
-        spike.name = "spike";
-        
-        addChild(spike)
-        
-        terrain.strokeColor = .black
-        terrain.fillColor = .black
-        terrain.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 30))
-        terrain.physicsBody?.affectedByGravity = false
-        terrain.physicsBody?.isDynamic = false
-        terrain.position = .init(x:0, y:-200)
+//        terrain.strokeColor = .black
+//        terrain.fillColor = .black
+//        terrain.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 30))
+//        terrain.physicsBody?.affectedByGravity = false
+//        terrain.physicsBody?.isDynamic = false
+//        terrain.position = .init(x:0, y:-200)
         
         // Create a label
         let scoreCount = SKLabelNode(text: "1")
@@ -88,6 +77,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
 
+        startTimer()
+        
+        
+    }
+    
     
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody = SKPhysicsBody()
@@ -181,14 +175,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 #endif
         
         
-        
-        if changePos {
-            spike.position.y = 350;
-            changePos = false
-        }
     }
     
     func resetGravityOfPhysicsWorldToZero() {
 //        physicsWorld.gravity = .zero
+    }
+    
+    func startTimer() {
+        timer?.invalidate()
+            
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
+    }
+    
+    @objc func timerFired() {
+        if !changePos {
+            spikeItem();
+        }
+    }
+    
+    func spikeItem(){
+        
+        let randomNumber = Int(arc4random_uniform(721)) - 360
+        
+        spike = SKSpriteNode(imageNamed: "Spike")
+        spike.size = CGSize(width: 75, height: 75)
+        spike.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
+        spike.physicsBody?.affectedByGravity = true
+        spike.physicsBody?.isDynamic = true
+        spike.physicsBody?.allowsRotation = false;
+        spike.position = .init(x:randomNumber, y:500)
+        spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
+        spike.name = "spike";
+        
+        addChild(spike)
     }
 }
