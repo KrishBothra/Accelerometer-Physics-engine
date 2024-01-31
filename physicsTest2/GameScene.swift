@@ -20,6 +20,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var endTouch = CGPoint()
     var motionManager: CMMotionManager!
     
+    var changePos = false;
+    
     
 
     
@@ -41,23 +43,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
         player.physicsBody?.affectedByGravity = false
         player.physicsBody?.isDynamic = true
-        player.physicsBody?.allowsRotation = true;
+        player.physicsBody?.allowsRotation = false;
         player.position = .init(x:0, y:0)
         player.physicsBody?.categoryBitMask = PhysicsCategory.player
         player.physicsBody?.collisionBitMask = PhysicsCategory.spike
         player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+        player.name = "player"
         
         addChild(player)
         
         spike = SKSpriteNode(imageNamed: "Spike")
         spike.size = CGSize(width: 75, height: 75)
-        spike.physicsBody = SKPhysicsBody(circleOfRadius: 14)
+        spike.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
         spike.physicsBody?.affectedByGravity = true
         spike.physicsBody?.isDynamic = true
         spike.physicsBody?.allowsRotation = false;
         spike.position = .init(x:0, y:200)
         spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
-
+        spike.name = "spike";
+        
         addChild(spike)
         
         terrain.strokeColor = .black
@@ -88,14 +92,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
-        print("First Body: \(firstBody.node?.name)")
-            print("Second Body: \(secondBody.node?.name)")
+       
 
         
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
-            player.position = .init(x:0, y:0)
-            spike.position = .init(x: 0, y: 200)
+            changePos = true;
         }
         
     }
@@ -170,7 +172,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         
-       
+        if changePos {
+            spike.position.y = 350;
+            changePos = false
+        }
     }
     
     func resetGravityOfPhysicsWorldToZero() {
