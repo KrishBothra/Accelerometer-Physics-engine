@@ -71,13 +71,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         terrain.physicsBody?.isDynamic = false
         terrain.position = .init(x:0, y:-200)
         
+        // Create a label
+        let scoreCount = SKLabelNode(text: "1")
+        scoreCount.fontSize = 75
+        scoreCount.fontColor = .black
+        scoreCount.position = CGPoint(x: 300, y: 500)
+        scoreCount.horizontalAlignmentMode = .right
+        scoreCount.verticalAlignmentMode = .top
+        addChild(scoreCount)
+        
         
         motionManager = CMMotionManager()
         motionManager.startAccelerometerUpdates()
         
-        addChild(terrain)
-        
+//        addChild(terrain)
     }
+    
+
     
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody = SKPhysicsBody()
