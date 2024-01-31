@@ -23,7 +23,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var changePos = false;
     var timer: Timer?
     
+    var score = 0;
     
+    var spikeA: [SKSpriteNode] = [];
 
     
     override func didMove(to view: SKView) {
@@ -61,7 +63,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        terrain.position = .init(x:0, y:-200)
         
         // Create a label
-        let scoreCount = SKLabelNode(text: "1")
+        let scoreCount = SKLabelNode(text: String(score))
         scoreCount.fontSize = 75
         scoreCount.fontColor = .black
         scoreCount.position = CGPoint(x: 300, y: 500)
@@ -74,7 +76,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
 //        addChild(terrain)
-    }
     
 
         startTimer()
@@ -190,6 +191,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func timerFired() {
         if !changePos {
             spikeItem();
+            if(spike.position.y<player.position.y){
+                score+=1;
+                spike.isHidden=true;
+            }
         }
     }
     
