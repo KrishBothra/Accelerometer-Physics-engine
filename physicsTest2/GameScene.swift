@@ -78,7 +78,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody = SKPhysicsBody()
         var secondBody = SKPhysicsBody()
-        print("Contact Detected")
 
         
         if contact.bodyA.node?.name == "player" {
@@ -89,9 +88,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
+        print("First Body: \(firstBody.node?.name)")
+            print("Second Body: \(secondBody.node?.name)")
+
         
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
+            player.position = .init(x:0, y:0)
+            spike.position = .init(x: 0, y: 200)
         }
         
     }
