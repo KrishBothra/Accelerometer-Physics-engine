@@ -23,10 +23,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var changePos = false;
     var timer: Timer?
     
-    var score = 0;
+    var score: Int = 0;
     
     var spikeA: [SKSpriteNode] = [];
 
+    var scoreCount: SKLabelNode!
+    
+    var rampUp: Double = 0.5;
+    var minS: Int = 0;
+    var maxS: Int = 10;
+    var speedFall: Double = 1.0;
     
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
@@ -63,12 +69,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        terrain.position = .init(x:0, y:-200)
         
         // Create a label
-        let scoreCount = SKLabelNode(text: String(score))
+        scoreCount = SKLabelNode(text: String(score))
         scoreCount.fontSize = 75
         scoreCount.fontColor = .black
         scoreCount.position = CGPoint(x: 300, y: 500)
         scoreCount.horizontalAlignmentMode = .right
         scoreCount.verticalAlignmentMode = .top
+        
         addChild(scoreCount)
         
         
@@ -135,7 +142,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         player.position = .init(x:0, y:0)
-        spike.position = .init(x: 0, y: 200)
+//        spike.position = .init(x: 0, y: 200)
+        changePos = false;
+        score = 0;
+        scoreCount.text = String(score)
+        backgroundColor = .lightGray
 //        resetGravityOfPhysicsWorldToZero()
     }
     
@@ -175,6 +186,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 #endif
         
+        for i in (0..<spikeA.count).reversed() {
+            if spikeA[i].position.y < -500 {
+                score += 1
+                scoreCount.text = String(score)
+                
+                // Remove the sprite from the array
+                
+                // Remove the sprite from the parent
+                spikeA[i].removeFromParent()
+                spikeA.remove(at: i)
+
+            }
+        }
+        
+        if(score>=maxS){
+            minS = score;
+            maxS += 10
+            rampUp -= 0.1
+            print(String(rampUp))
+        }
+        speedFall = 1*rampUp
+        print(String(speedFall))
+
+        
+        
+        
+        
+        
         
     }
     
@@ -185,17 +224,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func startTimer() {
         timer?.invalidate()
             
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: (0.25), target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
     }
     
     @objc func timerFired() {
         if !changePos {
             spikeItem();
-            if(spike.position.y<player.position.y){
-                score+=1;
-                spike.isHidden=true;
+//            score+=1;
+//            scoreCount = SKLabelNode(text: String(score))
+            print(String(score))
+           
+                        
+            
+        }else{
+            backgroundColor = .red
+            for i in (0..<spikeA.count).reversed() {
+                spikeA[i].removeFromParent()
+                spikeA.remove(at: i)
+
+                
             }
         }
+    
     }
     
     func spikeItem(){
@@ -211,7 +261,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spike.position = .init(x:randomNumber, y:500)
         spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
         spike.name = "spike";
-        
+        spikeA.append(spike)
         addChild(spike)
     }
 }
