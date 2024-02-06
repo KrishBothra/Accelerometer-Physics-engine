@@ -114,6 +114,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             changePos = true;
         }
         
+        if let bulletNode = firstBody.node, let spikeNode = secondBody.node {
+            if bulletNode.name == "bullet" && spikeNode.name == "spike" {
+                print("Contactttt")
+                bulletNode.removeFromParent()
+                spikeNode.removeFromParent()
+            
+            }
+        }
+
+        
     }
     
     func touchDown(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -150,8 +160,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bullet.physicsBody?.isDynamic = true
         bullet.physicsBody?.allowsRotation = false;
         bullet.position = .init(x:player.position.x, y:player.position.y)
-        bullet.physicsBody?.categoryBitMask = PhysicsCategory.spike
         bullet.name = "bullet";
+        bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+        bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
+        bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
         bulletA.append(bullet)
         addChild(bullet)
         
@@ -200,6 +212,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 #endif
         
+        for i in (0..<bulletA.count).reversed(){
+            bullet.position.y+=10;
+            if bulletA[i].position.y > 500 {
+                bulletA[i].removeFromParent()
+                bulletA.remove(at: i)
+            }
+        }
+        
         for i in (0..<spikeA.count).reversed() {
             if spikeA[i].position.y < -500 {
                 score += 1
@@ -221,7 +241,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             print(String(rampUp))
         }
         speedFall = 1*rampUp
-        print(String(speedFall))
 
         
         
