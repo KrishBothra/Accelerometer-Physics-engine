@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player = SKSpriteNode()
     var spike = SKSpriteNode()
+    var bullet = SKSpriteNode()
 
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
     
@@ -26,6 +27,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score: Int = 0;
     
     var spikeA: [SKSpriteNode] = [];
+    var bulletA: [SKSpriteNode] = [];
 
     var scoreCount: SKLabelNode!
     
@@ -141,12 +143,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             endTouch = touch.location(in: self)
         }
         
-        player.position = .init(x:0, y:0)
-//        spike.position = .init(x: 0, y: 200)
-        changePos = false;
-        score = 0;
-        scoreCount.text = String(score)
-        backgroundColor = .lightGray
+        bullet = SKSpriteNode(imageNamed: "Bullet")
+        bullet.size = CGSize(width: 75, height: 75)
+        bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
+        bullet.physicsBody?.affectedByGravity = false;
+        bullet.physicsBody?.isDynamic = true
+        bullet.physicsBody?.allowsRotation = false;
+        bullet.position = .init(x:player.position.x, y:player.position.y)
+        bullet.physicsBody?.categoryBitMask = PhysicsCategory.spike
+        bullet.name = "bullet";
+        bulletA.append(bullet)
+        addChild(bullet)
+        
+//        player.position = .init(x:0, y:0)
+////        spike.position = .init(x: 0, y: 200)
+//        changePos = false;
+//        score = 0;
+//        scoreCount.text = String(score)
+//        backgroundColor = .lightGray
 //        resetGravityOfPhysicsWorldToZero()
     }
     
