@@ -31,7 +31,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var rampUp: Double = 0.5;
     var minS: Int = 0;
-    var maxS: Int = 10;
+    var maxS: Int = 5;
     var speedFall: Double = 1.0;
     
     override func didMove(to view: SKView) {
@@ -147,6 +147,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         score = 0;
         scoreCount.text = String(score)
         backgroundColor = .lightGray
+        rampUp = 0.5
+        speedFall = 1*rampUp
 //        resetGravityOfPhysicsWorldToZero()
     }
     
@@ -202,9 +204,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if(score>=maxS){
             minS = score;
-            maxS += 10
-            rampUp -= 0.1
-            print(String(rampUp))
+            maxS += 5
+            if(rampUp>=0.25){
+                rampUp -= 0.05
+                startTimer()
+                print(String(rampUp))
+            }
         }
         speedFall = 1*rampUp
         print(String(speedFall))
@@ -224,7 +229,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func startTimer() {
         timer?.invalidate()
             
-        timer = Timer.scheduledTimer(timeInterval: (0.25), target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: (speedFall), target: self, selector: #selector(timerFired), userInfo: nil, repeats: true)
     }
     
     @objc func timerFired() {
