@@ -149,6 +149,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundColor = .lightGray
         rampUp = 0.5
         speedFall = 1*rampUp
+        minS = 0;
+        maxS = 5;
 //        resetGravityOfPhysicsWorldToZero()
     }
     
