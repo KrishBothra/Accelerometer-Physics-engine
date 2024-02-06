@@ -34,6 +34,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var maxS: Int = 5;
     var speedFall: Double = 1.0;
     
+    var button = SKSpriteNode()
+    let buttonTexture = SKTexture(imageNamed: "button_default")
+    let buttonHighlightedTexture = SKTexture(imageNamed: "button_highlighted")
+
+    
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
 
@@ -83,7 +88,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
 //        addChild(terrain)
-    
+        button = SKSpriteNode(texture: buttonTexture)
+        button.name = "button" // Assign a name to the button for identification
+        button.isHidden = true;
+        addChild(button)
 
         startTimer()
         
@@ -110,6 +118,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
             changePos = true;
+            button.isHidden = false;
+            button.position.x = 0
+            button.position.y = 0;
         }
         
     }
@@ -128,9 +139,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
-            startTouch = touch.location(in: self)
+            let location = touch.location(in: self)
+            let node = self.atPoint(location)
+            
+            // Check if the touched node is the button
+            if node.name == "button" {
+                // Button is tapped
+                if let buttonNode = node as? SKSpriteNode {
+                    buttonNode.texture = buttonHighlightedTexture
+                    resetGame()
+                    // Perform button action
+                }
+            }
         }
     }
+
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
@@ -141,16 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             endTouch = touch.location(in: self)
         }
         
-        player.position = .init(x:0, y:0)
-//        spike.position = .init(x: 0, y: 200)
-        changePos = false;
-        score = 0;
-        scoreCount.text = String(score)
-        backgroundColor = .lightGray
-        rampUp = 0.5
-        speedFall = 1*rampUp
-        minS = 0;
-        maxS = 5;
+        
 //        resetGravityOfPhysicsWorldToZero()
     }
     
@@ -270,5 +284,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spike.name = "spike";
         spikeA.append(spike)
         addChild(spike)
+    }
+    
+    func resetGame(){
+        player.position = .init(x:0, y:0)
+//        spike.position = .init(x: 0, y: 200)
+        changePos = false;
+        score = 0;
+        scoreCount.text = String(score)
+        backgroundColor = .lightGray
+        rampUp = 0.5
+        speedFall = 1*rampUp
+        minS = 0;
+        maxS = 5;
+        button.isHidden = true;
     }
 }
