@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player = SKSpriteNode()
     var spike = SKSpriteNode()
+    var cloud = SKSpriteNode()
 
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
     
@@ -26,6 +27,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score: Int = 0;
     
     var spikeA: [SKSpriteNode] = [];
+    
 
     var scoreCount: SKLabelNode!
     
@@ -37,23 +39,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var button = SKSpriteNode()
     let buttonTexture = SKTexture(imageNamed: "button_default")
     let buttonHighlightedTexture = SKTexture(imageNamed: "button_highlighted")
+    
+    var cloudSpawn = 0
+
+    let screenWidth = UIScreen.main.bounds.width
 
     
     override func didMove(to view: SKView) {
         self.physicsWorld.contactDelegate = self
 
-        self.backgroundColor = .lightGray
-
-            // Set the scale mode to .aspectFit
-        self.scaleMode = .aspectFit
-            
+//        self.backgroundColor = .lightGray
+//
+//            // Set the scale mode to .aspectFit
+//        self.scaleMode = .aspectFit
+        self.scaleMode = .aspectFill
             // Create a physics body representing an edge loop from the scene's frame
-        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+//        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
     
         resetGravityOfPhysicsWorldToZero()
-        backgroundColor = .lightGray
+        backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
         player = SKSpriteNode(imageNamed: "Marble")
-        player.size = CGSize(width: 75, height: 75)
+        player.size = CGSize(width: 50, height: 50)
         player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
         player.physicsBody?.affectedByGravity = false
         player.physicsBody?.isDynamic = true
@@ -176,10 +182,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
 #if targetEnvironment(simulator)
-    if let currentTouch = lastTouchPosition {
-        let diff = CGPoint(x: currentTouch.x - player.position.x, y: currentTouch.y - player.position.y)
-        physicsWorld.gravity = CGVector(dx: diff.x / 100, dy: diff.y / 100)
-    }
+//    if let currentTouch = lastTouchPosition {
+//        let diff = CGPoint(x: currentTouch.x - player.position.x, y: currentTouch.y - player.position.y)
+//        physicsWorld.gravity = CGVector(dx: diff.x / 100, dy: diff.y / 100)
+//    }
 #else
     if let accelerometerData = motionManager.accelerometerData {
         let accelerationVector = CGVector(dx: accelerometerData.acceleration.x * 75, dy: accelerometerData.acceleration.y * 0)
@@ -191,11 +197,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             let sceneSize = self.size
 
             // Clamp the player's position to stay within the bounds of the scene
-        if player.position.x>361.8 {
-            player.position.x = 361.8
+        if player.position.x>screenWidth-100 {
+            player.position.x = screenWidth-100
         }
-        else if player.position.x<(-361.8){
-            player.position.x = (-361.8)
+        else if player.position.x<(-screenWidth+100){
+            player.position.x = (-screenWidth+100)
         }
 //        print("Player Position: \(player.position)")
 
@@ -205,8 +211,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 #endif
         
         for i in (0..<spikeA.count).reversed() {
-            if spikeA[i].position.y < -500 {
-                score += 1
+            if spikeA[i].position.y < -700 {
+                if(spikeA[i].name == "spike"){
+                    score += 1
+                }
                 scoreCount.text = String(score)
                 
                 // Remove the sprite from the array
@@ -221,14 +229,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if(score>=maxS){
             minS = score;
             maxS += 5
-            if(rampUp>=0.25){
+            if(rampUp>=0.2){
                 rampUp -= 0.05
                 startTimer()
                 print(String(rampUp))
             }
         }
         speedFall = 1*rampUp
-        print(String(speedFall))
+//        print(String(speedFall))
 
         
         
@@ -254,11 +262,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //            score+=1;
 //            scoreCount = SKLabelNode(text: String(score))
             print(String(score))
+            if(cloudSpawn>=2){
+                spawnCloud()
+                cloudSpawn = 0
+            }else{
+                cloudSpawn += 1;
+            }
+            
+        
            
                         
             
         }else{
-            backgroundColor = .red
+            timer?.invalidate()
+            backgroundColor = UIColor(red: 1.0, green: 0.5, blue: 0.5, alpha: 1.0)
             for i in (0..<spikeA.count).reversed() {
                 spikeA[i].removeFromParent()
                 spikeA.remove(at: i)
@@ -270,33 +287,72 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func spikeItem(){
-        
-        let randomNumber = Int(arc4random_uniform(721)) - 360
+        let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+        print(randomNumber)
         
         spike = SKSpriteNode(imageNamed: "Spike")
-        spike.size = CGSize(width: 75, height: 75)
+        spike.size = CGSize(width: 50, height: 50)
         spike.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
         spike.physicsBody?.affectedByGravity = true
         spike.physicsBody?.isDynamic = true
         spike.physicsBody?.allowsRotation = false;
-        spike.position = .init(x:randomNumber, y:500)
+        spike.position = .init(x:randomNumber, y:700)
         spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
         spike.name = "spike";
         spikeA.append(spike)
         addChild(spike)
+        
+        
+    }
+    
+    func spawnCloud(){
+        var cloudCount = 0;
+        
+        for i in (0..<spikeA.count) {
+            if(spikeA[i].name == "cloud"){
+                cloudCount += 1;
+            }
+            
+        }
+        
+        if(cloudCount<5){
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+            
+            cloud = SKSpriteNode(imageNamed: "cloud")
+            cloud.size = CGSize(width: 100, height: 100)
+            cloud.physicsBody = SKPhysicsBody(rectangleOf: cloud.size)
+            
+            cloud.physicsBody?.affectedByGravity = true
+            cloud.physicsBody?.isDynamic = true
+            
+            cloud.physicsBody?.categoryBitMask = 0
+            cloud.physicsBody?.collisionBitMask = 0
+            cloud.physicsBody?.contactTestBitMask = 0
+            
+            cloud.position = .init(x:randomNumberC, y:700)
+            cloud.zPosition = -1
+            cloud.physicsBody?.linearDamping = 5
+            cloud.alpha = 0.5
+            cloud.name = "cloud";
+            
+            spikeA.append(cloud)
+            addChild(cloud)
+        }
     }
     
     func resetGame(){
         player.position = .init(x:0, y:0)
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
+        cloudSpawn = 0
         score = 0;
         scoreCount.text = String(score)
-        backgroundColor = .lightGray
+        backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
         rampUp = 0.5
         speedFall = 1*rampUp
         minS = 0;
         maxS = 5;
         button.isHidden = true;
+        startTimer()
     }
 }
