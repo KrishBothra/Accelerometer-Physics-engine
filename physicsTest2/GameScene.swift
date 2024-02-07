@@ -67,7 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.physicsBody?.affectedByGravity = false
         player.physicsBody?.isDynamic = true
         player.physicsBody?.allowsRotation = false;
-        player.position = .init(x:0, y:0)
+        player.position = .init(x:0, y:-200)
         player.physicsBody?.categoryBitMask = PhysicsCategory.player
         player.physicsBody?.collisionBitMask = PhysicsCategory.spike
         player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
@@ -257,7 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        print("Player Position: \(player.position)")
 
 //        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
-            player.position.y = max(min(player.position.y, sceneSize.height), 0)
+            player.position.y = -300
     }
 #endif
         
@@ -345,7 +345,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func spikeItem(){
-        let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+        let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-125)) - Int(screenWidth)
         print(randomNumber)
         
         spike = SKSpriteNode(imageNamed: "Spike")
@@ -374,7 +374,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if(cloudCount<5){
-            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-175)) - Int(screenWidth)
             
             cloud = SKSpriteNode(imageNamed: "cloud")
             cloud.size = CGSize(width: 100, height: 100)
@@ -399,7 +399,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func resetGame(){
-        player.position = .init(x:0, y:0)
+        player.position = .init(x:0, y:-300)
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
         cloudSpawn = 0
