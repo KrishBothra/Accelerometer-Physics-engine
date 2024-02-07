@@ -27,7 +27,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var score: Int = 0;
     
     var spikeA: [SKSpriteNode] = [];
-    var bulletA: [SKSpriteNode] = [];
 
     var scoreCount: SKLabelNode!
     
@@ -96,7 +95,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody = SKPhysicsBody()
         var secondBody = SKPhysicsBody()
-
+        
         
         if contact.bodyA.node?.name == "player" {
             
@@ -107,7 +106,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
        
-
+        print("hiiii")
         
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
@@ -119,11 +118,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 print("Contactttt")
                 bulletNode.removeFromParent()
                 spikeNode.removeFromParent()
-            
+            }
+            if bulletNode.name == "spike" && spikeNode.name == "bullet" {
+                print("Contactttt")
+                bulletNode.removeFromParent()
+                spikeNode.removeFromParent()
             }
         }
 
         
+    }
+    
+    
+    func isBulletOnScreen() -> Bool {
+        for node in self.children {
+            if node.name == "bullet" {
+                return true
+            }
+        }
+        return false
     }
     
     func touchDown(_ touches: Set<UITouch>, with event: UIEvent) {
@@ -153,19 +166,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             endTouch = touch.location(in: self)
         }
         
-        bullet = SKSpriteNode(imageNamed: "Bullet")
-        bullet.size = CGSize(width: 75, height: 75)
-        bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
-        bullet.physicsBody?.affectedByGravity = false;
-        bullet.physicsBody?.isDynamic = true
-        bullet.physicsBody?.allowsRotation = false;
-        bullet.position = .init(x:player.position.x, y:player.position.y)
-        bullet.name = "bullet";
-        bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-        bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
-        bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
-        bulletA.append(bullet)
-        addChild(bullet)
+        // Check if there is already a bullet on the screen
+        if !isBulletOnScreen() {
+            // Spawn a new bullet
+            bullet = SKSpriteNode(imageNamed: "Bullet")
+            bullet.size = CGSize(width: 75, height: 75)
+            bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
+            bullet.physicsBody?.affectedByGravity = false;
+            bullet.physicsBody?.isDynamic = true
+            bullet.physicsBody?.allowsRotation = false;
+            bullet.position = .init(x:player.position.x, y:player.position.y)
+            bullet.name = "bullet";
+            bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+            bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
+            bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+            addChild(bullet)
+        }
         
 //        player.position = .init(x:0, y:0)
 ////        spike.position = .init(x: 0, y: 200)
@@ -212,13 +228,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 #endif
         
-        for i in (0..<bulletA.count).reversed(){
-            bullet.position.y+=10;
-            if bulletA[i].position.y > 500 {
-                bulletA[i].removeFromParent()
-                bulletA.remove(at: i)
-            }
+        bullet.position.y+=10;
+        if bullet.position.y > 500 {
+            bullet.removeFromParent()
         }
+        
         
         for i in (0..<spikeA.count).reversed() {
             if spikeA[i].position.y < -500 {
