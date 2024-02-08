@@ -15,6 +15,7 @@
 		4D3E2AA92B5B0C2A006219C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AA72B5B0C2A006219C3 /* Main.storyboard */; };
 		4D3E2AAB2B5B0C2C006219C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */; };
 		4D3E2AAE2B5B0C2C006219C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */; };
+		4D469EC02B7459DC003A417F /* bit.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D469EBF2B7459DC003A417F /* bit.ttf */; };
 		4D469EC22B7459E8003A417F /* 8BitOutlined-oMV4.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D469EC12B7459E8003A417F /* 8BitOutlined-oMV4.ttf */; };
 		4D50CCA22B683BE3003EBF43 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */; };
 		4D8546A22B755C9D00A49FED /* minecraft.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D8546A12B755C9D00A49FED /* minecraft.ttf */; };
@@ -31,6 +32,7 @@
 		4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D3E2AAD2B5B0C2C006219C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4D469EBE2B7457DB003A417F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		4D469EBF2B7459DC003A417F /* bit.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = bit.ttf; path = "../../../../Downloads/8-bit-font/bit.ttf"; sourceTree = "<group>"; };
 		4D469EC12B7459E8003A417F /* 8BitOutlined-oMV4.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "8BitOutlined-oMV4.ttf"; sourceTree = "<group>"; };
 		4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 		4D8546A12B755C9D00A49FED /* minecraft.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = minecraft.ttf; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */,
 				4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */,
 				4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */,
+				4D469EBF2B7459DC003A417F /* bit.ttf */,
 				4D469EC12B7459E8003A417F /* 8BitOutlined-oMV4.ttf */,
 				4D8546A12B755C9D00A49FED /* minecraft.ttf */,
 			);
@@ -141,6 +144,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D469EC22B7459E8003A417F /* 8BitOutlined-oMV4.ttf in Resources */,
+				4D469EC02B7459DC003A417F /* bit.ttf in Resources */,
 				4D8546A22B755C9D00A49FED /* minecraft.ttf in Resources */,
 				4D3E2AA92B5B0C2A006219C3 /* Main.storyboard in Resources */,
 				4D3E2AA02B5B0C2A006219C3 /* GameScene.sks in Resources */,
@@ -312,7 +316,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2VURF53UCP;
+				DEVELOPMENT_TEAM = D644835SY8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = physicsTest2/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -326,7 +330,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.krishbothra.phyiscsTest22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishbothra.phyiscsTest21;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -341,7 +345,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2VURF53UCP;
+				DEVELOPMENT_TEAM = D644835SY8;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = physicsTest2/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -355,7 +359,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.krishbothra.phyiscsTest22;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krishbothra.phyiscsTest21;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
