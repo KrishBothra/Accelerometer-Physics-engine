@@ -20,6 +20,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var Bfire = false
     
     var bullet = SKSpriteNode()
+    
+    let highScoreKey = "HighScore"
+
 
 
     let terrain = SKShapeNode(rectOf: CGSize(width: 500, height: 30))
@@ -44,7 +47,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var speedFall: Double = 1.0;
     
     var label = SKLabelNode()
-   
+    var HSlabel = SKLabelNode()
     
     var cloudSpawn = 0
 
@@ -79,6 +82,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
 //        addChild(terrain)
+        
+        
+        HSlabel = SKLabelNode(fontNamed: "minecraft")
+        HSlabel.text = "High Score: "
+        HSlabel.fontColor = .black
+        HSlabel.fontSize = 40
+        HSlabel.position = CGPoint(x: 0, y: -600)
+        HSlabel.isHidden = false
       
         label = SKLabelNode(fontNamed: "minecraft")
                 label.text = "Start Game"
@@ -88,11 +99,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 label.name = "button"
         label.isHidden = false;
 
-            addChild(label)
-
+        addChild(label)
+        addChild(HSlabel)
 //        startTimer()
         
-        
+        printHighScore()
+
     }
     
     
@@ -110,10 +122,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             secondBody = contact.bodyA
         }
        
-        print("hiiii")
+//        print("hiiii")
         
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
-            print("Contact Detected")
+//            print("Contact Detected")
             changePos = true;
             label.isHidden = false;
             label.position.x = 0
@@ -122,12 +134,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if let bulletNode = firstBody.node, let spikeNode = secondBody.node {
             if bulletNode.name == "bullet" && spikeNode.name == "spike" {
-                print("Contactttt")
+//                print("Contactttt")
                 bulletNode.removeFromParent()
                 spikeNode.removeFromParent()
             }
             if bulletNode.name == "spike" && spikeNode.name == "bullet" {
-                print("Contactttt")
+//                print("Contactttt")
                 bulletNode.removeFromParent()
                 spikeNode.removeFromParent()
             }
@@ -167,6 +179,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if node.name == "button" {
                 // Button is tapped
                 if let buttonNode = node as? SKLabelNode {
+//                    resetHighScore()
                     resetGame()
                     // Perform button action
                 }
@@ -281,7 +294,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if(rampUp>=0.25){
                 rampUp -= 0.05
                 startTimer()
-                print(String(rampUp))
+//                print(String(rampUp))
             }
         }
         speedFall = 1*rampUp
@@ -311,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             spikeItem();
 //            score+=1;
 //            scoreCount = SKLabelNode(text: String(score))
-            print(String(score))
+//            print(String(score))
             if(cloudSpawn>=2){
                 spawnCloud()
                 cloudSpawn = 0
@@ -338,7 +351,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func spikeItem(){
         let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-125)) - Int(screenWidth-53)
-        print(randomNumber)
+//        print(randomNumber)
         
         spike = SKSpriteNode(imageNamed: "missile")
         spike.size = CGSize(width: 50, height: 50)
@@ -416,6 +429,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
         cloudSpawn = 0
+        saveHighScoreIfGreater(score: score)
         score = 0;
         scoreCount.text = String(score)
         backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
@@ -427,5 +441,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         Pmove = true
         Bfire = true
         startTimer()
+        printHighScore()
+        
+
+    }
+    
+    func printHighScore() {
+        if let highScore = UserDefaults.standard.value(forKey: highScoreKey) as? Int {
+            // Update the high score label
+            HSlabel.text = "High Score: \(highScore)"
+            print("High Score: \(highScore)")
+        }
+    }
+    
+    
+    func loadHighScore() -> Int {
+        return UserDefaults.standard.integer(forKey: highScoreKey)
+    }
+    
+    func saveHighScoreIfGreater(score: Int) {
+        if score > loadHighScore() {
+            // Save the high score to UserDefaults
+            UserDefaults.standard.set(score, forKey: highScoreKey)
+        }
+    }
+    
+    func resetHighScore() {
+        UserDefaults.standard.set(0, forKey: highScoreKey)
     }
 }
+
