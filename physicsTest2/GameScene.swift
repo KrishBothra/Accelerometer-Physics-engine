@@ -9,6 +9,7 @@ import SpriteKit
 import GameplayKit
 import CoreMotion
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player = SKSpriteNode()
@@ -39,9 +40,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var maxS: Int = 5;
     var speedFall: Double = 1.0;
     
-    var button = SKSpriteNode()
-    let buttonTexture = SKTexture(imageNamed: "button_default")
-    let buttonHighlightedTexture = SKTexture(imageNamed: "button_highlighted")
+    var label = SKLabelNode()
+   
     
     var cloudSpawn = 0
 
@@ -61,8 +61,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
         resetGravityOfPhysicsWorldToZero()
         backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
-        player = SKSpriteNode(imageNamed: "Marble")
-        player.size = CGSize(width: 50, height: 50)
+        player = SKSpriteNode(imageNamed: "fighterJet")
+        player.size = CGSize(width: 150, height: 150)
         player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
         player.physicsBody?.affectedByGravity = false
         player.physicsBody?.isDynamic = true
@@ -83,13 +83,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        terrain.position = .init(x:0, y:-200)
         
         // Create a label
-        scoreCount = SKLabelNode(text: String(score))
+        scoreCount = SKLabelNode(fontNamed: "8bit")
         scoreCount.fontSize = 75
-        scoreCount.fontColor = .black
-        scoreCount.position = CGPoint(x: 300, y: 500)
-        scoreCount.horizontalAlignmentMode = .right
-        scoreCount.verticalAlignmentMode = .top
         
+        scoreCount.fontColor = .black
+        scoreCount.position = CGPoint(x: 0, y: 500)
+        scoreCount.horizontalAlignmentMode = .center
+        scoreCount.verticalAlignmentMode = .top
+        scoreCount.text = "0";
         addChild(scoreCount)
         
         
@@ -97,10 +98,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
 //        addChild(terrain)
-        button = SKSpriteNode(texture: buttonTexture)
-        button.name = "button" // Assign a name to the button for identification
-        button.isHidden = true;
-        addChild(button)
+      
+        label = SKLabelNode(fontNamed: "8bit4")
+                label.text = "Play Again"
+                label.fontColor = .black
+                label.fontSize = 40
+                label.position = CGPoint(x: 0, y: -20)
+                label.name = "button"
+        label.isHidden = true;
+
+            addChild(label)
 
         startTimer()
         
@@ -127,9 +134,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
             changePos = true;
-            button.isHidden = false;
-            button.position.x = 0
-            button.position.y = 0;
+            label.isHidden = false;
+            label.position.x = 0
+            label.position.y = 0;
         }
         
         if let bulletNode = firstBody.node, let spikeNode = secondBody.node {
@@ -178,8 +185,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Check if the touched node is the button
             if node.name == "button" {
                 // Button is tapped
-                if let buttonNode = node as? SKSpriteNode {
-                    buttonNode.texture = buttonHighlightedTexture
+                if let buttonNode = node as? SKLabelNode {
+                    
                     resetGame()
                     // Perform button action
                 }
@@ -202,7 +209,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !isBulletOnScreen() {
             // Spawn a new bullet
             bullet = SKSpriteNode(imageNamed: "Bullet")
-            bullet.size = CGSize(width: 75, height: 75)
+            bullet.size = CGSize(width: 20, height: 60)
             bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
             bullet.physicsBody?.affectedByGravity = false;
             bullet.physicsBody?.isDynamic = true
@@ -374,7 +381,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         if(cloudCount<5){
-            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-175)) - Int(screenWidth)
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-126)) - Int(screenWidth-53)
             
             cloud = SKSpriteNode(imageNamed: "cloud")
             cloud.size = CGSize(width: 100, height: 100)
@@ -410,7 +417,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         speedFall = 1*rampUp
         minS = 0;
         maxS = 5;
-        button.isHidden = true;
+        label.isHidden = true;
         startTimer()
     }
 }

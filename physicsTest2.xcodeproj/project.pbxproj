@@ -15,6 +15,7 @@
 		4D3E2AA92B5B0C2A006219C3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AA72B5B0C2A006219C3 /* Main.storyboard */; };
 		4D3E2AAB2B5B0C2C006219C3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */; };
 		4D3E2AAE2B5B0C2C006219C3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */; };
+		4D469EBA2B744C1E003A417F /* 8bit.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D469EB92B744C1D003A417F /* 8bit.ttf */; };
 		4D50CCA22B683BE3003EBF43 /* PhysicsCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 		4D3E2AA82B5B0C2A006219C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4D3E2AAD2B5B0C2C006219C3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		4D469EB92B744C1D003A417F /* 8bit.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 8bit.ttf; sourceTree = "<group>"; };
 		4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhysicsCategory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -70,6 +72,7 @@
 				4D3E2AAA2B5B0C2C006219C3 /* Assets.xcassets */,
 				4D3E2AAC2B5B0C2C006219C3 /* LaunchScreen.storyboard */,
 				4D50CCA12B683BE3003EBF43 /* PhysicsCategory.swift */,
+				4D469EB92B744C1D003A417F /* 8bit.ttf */,
 			);
 			path = physicsTest2;
 			sourceTree = "<group>";
@@ -133,6 +136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4D3E2AA92B5B0C2A006219C3 /* Main.storyboard in Resources */,
+				4D469EBA2B744C1E003A417F /* 8bit.ttf in Resources */,
 				4D3E2AA02B5B0C2A006219C3 /* GameScene.sks in Resources */,
 				4D3E2AAB2B5B0C2C006219C3 /* Assets.xcassets in Resources */,
 				4D3E2AAE2B5B0C2C006219C3 /* LaunchScreen.storyboard in Resources */,
@@ -308,8 +312,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -336,8 +340,8 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
