@@ -83,9 +83,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        terrain.position = .init(x:0, y:-200)
         
         // Create a label
-        scoreCount = SKLabelNode(fontNamed: "8bit")
+        scoreCount = SKLabelNode(fontNamed: "bit")
         scoreCount.fontSize = 75
-        
         scoreCount.fontColor = .black
         scoreCount.position = CGPoint(x: 0, y: 500)
         scoreCount.horizontalAlignmentMode = .center
@@ -99,7 +98,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
 //        addChild(terrain)
       
-        label = SKLabelNode(fontNamed: "8bit4")
+        label = SKLabelNode(fontNamed: "bit")
                 label.text = "Play Again"
                 label.fontColor = .black
                 label.fontSize = 40
