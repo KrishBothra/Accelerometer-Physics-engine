@@ -247,9 +247,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 //        print("Player Position: \(player.position)")
                 
                 //        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
-                player.position.y = -300
             }
         }
+        player.position.y = -300
+
 #endif
         
         bullet.position.y+=10;
