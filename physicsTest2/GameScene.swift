@@ -15,10 +15,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player = SKSpriteNode()
     var spike = SKSpriteNode()
     var cloud = SKSpriteNode()
+
+    var bird = SKSpriteNode()
+
     
     var Pmove = false
     var Bfire = false
     
+
     var bullet = SKSpriteNode()
     
     let highScoreKey = "HighScore"
@@ -50,6 +54,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var HSlabel = SKLabelNode()
     
     var cloudSpawn = 0
+    var birdSpawn = 0
 
     let screenWidth = UIScreen.main.bounds.width
 
@@ -121,32 +126,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             firstBody = contact.bodyB
             secondBody = contact.bodyA
         }
-       
-//        print("hiiii")
+        
+        //        print("hiiii")
         
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
-//            print("Contact Detected")
+            //            print("Contact Detected")
             changePos = true;
             label.isHidden = false;
             label.position.x = 0
             label.position.y = 0;
         }
         
-        if let bulletNode = firstBody.node, let spikeNode = secondBody.node {
-            if bulletNode.name == "bullet" && spikeNode.name == "spike" {
-//                print("Contactttt")
+        if let bulletNode = firstBody.node, let coinNode = secondBody.node {
+            if bulletNode.name == "bullet" && coinNode.name == "bird" {
+                print("Contactttt")
                 bulletNode.removeFromParent()
-                spikeNode.removeFromParent()
+                coinNode.removeFromParent()
+                score=score+1
+                scoreCount.text = String(score)
             }
-            if bulletNode.name == "spike" && spikeNode.name == "bullet" {
-//                print("Contactttt")
+            if bulletNode.name == "bird" && coinNode.name == "bullet" {
+                print("Contactttt")
                 bulletNode.removeFromParent()
-                spikeNode.removeFromParent()
+                coinNode.removeFromParent()
+                score=score+1
+                scoreCount.text = String(score)
             }
         }
-
-        
     }
+    
     
     
     func isBulletOnScreen() -> Bool {
@@ -196,8 +204,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 bullet.position = .init(x:player.position.x, y:player.position.y)
                 bullet.name = "bullet";
                 bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-                bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
-                bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+                bullet.physicsBody?.collisionBitMask = PhysicsCategory.bird
+                bullet.physicsBody?.contactTestBitMask = PhysicsCategory.bird
                 addChild(bullet)
             }
             
@@ -267,17 +275,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 #endif
         
         bullet.position.y+=10;
-        if bullet.position.y > 500 {
+        if bullet.position.y > 700 {
             bullet.removeFromParent()
         }
         
         
         for i in (0..<spikeA.count).reversed() {
             if spikeA[i].position.y < -700 {
-                if(spikeA[i].name == "spike"){
-                    score += 1
-                }
-                scoreCount.text = String(score)
+            
+                
 
                 // Remove the sprite from the array
                 
@@ -332,6 +338,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 cloudSpawn += 1;
             }
             
+            if(birdSpawn>=5){
+                spawnBird()
+                birdSpawn = 0
+            }else{
+                birdSpawn += 1;
+            }
+            
         
            
                         
@@ -361,6 +374,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         spike.physicsBody?.allowsRotation = false;
         spike.position = .init(x:randomNumber, y:700)
         spike.physicsBody?.categoryBitMask = PhysicsCategory.spike
+           
+           // Setting collision bit mask to collide with player only
+           spike.physicsBody?.collisionBitMask = PhysicsCategory.player
+           
+           // Setting contact test bit mask to detect collisions with the player
+           spike.physicsBody?.contactTestBitMask = PhysicsCategory.player
         spike.name = "spike";
         spikeA.append(spike)
         addChild(spike)
@@ -396,6 +415,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    func spawnBird(){
+        var birdCount = 0;
+        
+        for i in (0..<spikeA.count) {
+            if(spikeA[i].name == "bird"){
+                birdCount += 1;
+            }
+            
+        }
+        
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+            
+            bird = SKSpriteNode(imageNamed: "coin")
+            bird.size = CGSize(width: 50, height: 50)
+            bird.physicsBody = SKPhysicsBody(rectangleOf: bird.size)
+            
+            bird.physicsBody?.affectedByGravity = true
+            bird.physicsBody?.isDynamic = true
+            
+            bird.physicsBody?.categoryBitMask = PhysicsCategory.bird
+            
+            bird.position = .init(x:randomNumberC, y:700)
+            bird.physicsBody?.linearDamping = 2.5
+            bird.name = "bird";
+            
+            spikeA.append(bird)
+            addChild(bird)
+    }
+    
     func resetGame(){
         if(label.text=="Start Game"){
             resetGravityOfPhysicsWorldToZero()
@@ -417,8 +465,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             player.physicsBody?.allowsRotation = false;
             player.position = .init(x:0, y:-200)
             player.physicsBody?.categoryBitMask = PhysicsCategory.player
-            player.physicsBody?.collisionBitMask = PhysicsCategory.spike
-            player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+               
+               // Setting collision bit mask to collide with player only
+               player.physicsBody?.collisionBitMask = PhysicsCategory.spike
+               
+               // Setting contact test bit mask to detect collisions with the player
+               player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
             player.name = "player"
             
             addChild(player)
@@ -429,7 +481,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
         cloudSpawn = 0
+
         saveHighScoreIfGreater(score: score)
+
+        birdSpawn = 0
+
         score = 0;
         scoreCount.text = String(score)
         backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
