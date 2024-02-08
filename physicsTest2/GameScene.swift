@@ -9,12 +9,19 @@ import SpriteKit
 import GameplayKit
 import CoreMotion
 
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var player = SKSpriteNode()
     var spike = SKSpriteNode()
     var cloud = SKSpriteNode()
+
     var bird = SKSpriteNode()
+
+    
+    var Pmove = false
+    var Bfire = false
+    
 
     var bullet = SKSpriteNode()
 
@@ -37,12 +44,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     var rampUp: Double = 0.5;
     var minS: Int = 0;
-    var maxS: Int = 5;
+    var maxS: Int = 10;
     var speedFall: Double = 1.0;
     
-    var button = SKSpriteNode()
-    let buttonTexture = SKTexture(imageNamed: "button_default")
-    let buttonHighlightedTexture = SKTexture(imageNamed: "button_highlighted")
+    var label = SKLabelNode()
+   
     
     var cloudSpawn = 0
     var birdSpawn = 0
@@ -61,22 +67,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Create a physics body representing an edge loop from the scene's frame
 //        self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
     
-        resetGravityOfPhysicsWorldToZero()
-        backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
-        player = SKSpriteNode(imageNamed: "Marble")
-        player.size = CGSize(width: 50, height: 50)
-        player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
-        player.physicsBody?.affectedByGravity = false
-        player.physicsBody?.isDynamic = true
-        player.physicsBody?.allowsRotation = false;
-        player.position = .init(x:0, y:0)
-        player.physicsBody?.categoryBitMask = PhysicsCategory.player
-        player.physicsBody?.collisionBitMask = PhysicsCategory.spike
-        player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
-        player.name = "player"
-        
-        addChild(player)
-        
+       
 //        terrain.strokeColor = .black
 //        terrain.fillColor = .black
 //        terrain.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 500, height: 30))
@@ -85,26 +76,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        terrain.position = .init(x:0, y:-200)
         
         // Create a label
-        scoreCount = SKLabelNode(text: String(score))
-        scoreCount.fontSize = 75
-        scoreCount.fontColor = .black
-        scoreCount.position = CGPoint(x: 300, y: 500)
-        scoreCount.horizontalAlignmentMode = .right
-        scoreCount.verticalAlignmentMode = .top
-        
-        addChild(scoreCount)
+        backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
+       
         
         
         motionManager = CMMotionManager()
         motionManager.startAccelerometerUpdates()
         
 //        addChild(terrain)
-        button = SKSpriteNode(texture: buttonTexture)
-        button.name = "button" // Assign a name to the button for identification
-        button.isHidden = true;
-        addChild(button)
+      
+        label = SKLabelNode(fontNamed: "minecraft")
+                label.text = "Start Game"
+                label.fontColor = .black
+                label.fontSize = 80
+                label.position = CGPoint(x: 0, y: -20)
+                label.name = "button"
+        label.isHidden = false;
 
-        startTimer()
+            addChild(label)
+
+//        startTimer()
         
         
     }
@@ -129,9 +120,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if firstBody.node?.name == "player" && secondBody.node?.name == "spike" {
             print("Contact Detected")
             changePos = true;
-            button.isHidden = false;
-            button.position.x = 0
-            button.position.y = 0;
+            label.isHidden = false;
+            label.position.x = 0
+            label.position.y = 0;
         }
         
         if let bulletNode = firstBody.node, let spikeNode = secondBody.node {
@@ -180,12 +171,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             // Check if the touched node is the button
             if node.name == "button" {
                 // Button is tapped
-                if let buttonNode = node as? SKSpriteNode {
-                    buttonNode.texture = buttonHighlightedTexture
+                if let buttonNode = node as? SKLabelNode {
                     resetGame()
                     // Perform button action
                 }
             }
+            
+            if !isBulletOnScreen() && Bfire==true {
+                // Spawn a new bullet
+                bullet = SKSpriteNode(imageNamed: "Bullet")
+                bullet.size = CGSize(width: 20, height: 60)
+                bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
+                bullet.physicsBody?.affectedByGravity = false;
+                bullet.physicsBody?.isDynamic = true
+                bullet.physicsBody?.allowsRotation = false;
+                bullet.position = .init(x:player.position.x, y:player.position.y)
+                bullet.name = "bullet";
+                bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
+                bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
+                bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+                addChild(bullet)
+            }
+            
         }
     }
 
@@ -201,22 +208,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
 
         // Check if there is already a bullet on the screen
-        if !isBulletOnScreen() {
-            // Spawn a new bullet
-            bullet = SKSpriteNode(imageNamed: "Bullet")
-            bullet.size = CGSize(width: 75, height: 75)
-            bullet.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
-            bullet.physicsBody?.affectedByGravity = false;
-            bullet.physicsBody?.isDynamic = true
-            bullet.physicsBody?.allowsRotation = false;
-            bullet.position = .init(x:player.position.x, y:player.position.y)
-            bullet.name = "bullet";
-            bullet.physicsBody?.categoryBitMask = PhysicsCategory.bullet
-            bullet.physicsBody?.collisionBitMask = PhysicsCategory.spike
-            bullet.physicsBody?.contactTestBitMask = PhysicsCategory.spike
-            addChild(bullet)
-        }
-        
+       
 //        player.position = .init(x:0, y:0)
 ////        spike.position = .init(x: 0, y: 200)
 //        changePos = false;
@@ -240,27 +232,30 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 //        physicsWorld.gravity = CGVector(dx: diff.x / 100, dy: diff.y / 100)
 //    }
 #else
-    if let accelerometerData = motionManager.accelerometerData {
-        let accelerationVector = CGVector(dx: accelerometerData.acceleration.x * 75, dy: accelerometerData.acceleration.y * 0)
-
-            // Apply the vector directly to the player's position
-            player.position.x += accelerationVector.dx
-
-            // Get the size of the scene
-            let sceneSize = self.size
-
-            // Clamp the player's position to stay within the bounds of the scene
-        if player.position.x>screenWidth-100 {
-            player.position.x = screenWidth-100
+        if Pmove == true{
+            if let accelerometerData = motionManager.accelerometerData {
+                let accelerationVector = CGVector(dx: accelerometerData.acceleration.x * 75, dy: accelerometerData.acceleration.y * 0)
+                
+                // Apply the vector directly to the player's position
+                player.position.x += accelerationVector.dx
+                
+                // Get the size of the scene
+                let sceneSize = self.size
+                
+                // Clamp the player's position to stay within the bounds of the scene
+                if player.position.x>screenWidth-100 {
+                    player.position.x = screenWidth-100
+                }
+                else if player.position.x<(-screenWidth+100){
+                    player.position.x = (-screenWidth+100)
+                }
+                //        print("Player Position: \(player.position)")
+                
+                //        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
+            }
         }
-        else if player.position.x<(-screenWidth+100){
-            player.position.x = (-screenWidth+100)
-        }
-//        print("Player Position: \(player.position)")
+        player.position.y = -300
 
-//        player.position.x = max(min(player.position.x, sceneSize.width)+50, -(sceneSize.width)-50)
-            player.position.y = max(min(player.position.y, sceneSize.height), 0)
-    }
 #endif
         
         bullet.position.y+=10;
@@ -275,7 +270,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     score += 1
                 }
                 scoreCount.text = String(score)
-                
+
                 // Remove the sprite from the array
                 
                 // Remove the sprite from the parent
@@ -287,8 +282,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if(score>=maxS){
             minS = score;
-            maxS += 5
-            if(rampUp>=0.2){
+            maxS += 10
+            if(rampUp>=0.25){
                 rampUp -= 0.05
                 startTimer()
                 print(String(rampUp))
@@ -346,18 +341,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             for i in (0..<spikeA.count).reversed() {
                 spikeA[i].removeFromParent()
                 spikeA.remove(at: i)
-
-                
             }
+            Pmove = false
+            Bfire = false
         }
     
     }
     
     func spikeItem(){
-        let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+        let randomNumber = Int(arc4random_uniform(UInt32(screenWidth*2)-125)) - Int(screenWidth-53)
         print(randomNumber)
         
-        spike = SKSpriteNode(imageNamed: "Spike")
+        spike = SKSpriteNode(imageNamed: "missile")
         spike.size = CGSize(width: 50, height: 50)
         spike.physicsBody = SKPhysicsBody(rectangleOf: spike.size )
         spike.physicsBody?.affectedByGravity = true
@@ -373,17 +368,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func spawnCloud(){
-        var cloudCount = 0;
         
-        for i in (0..<spikeA.count) {
-            if(spikeA[i].name == "cloud"){
-                cloudCount += 1;
-            }
-            
-        }
         
-        if(cloudCount<5){
-            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+        
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-126)) - Int(screenWidth-53)
             
             cloud = SKSpriteNode(imageNamed: "cloud")
             cloud.size = CGSize(width: 100, height: 100)
@@ -404,7 +392,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             spikeA.append(cloud)
             addChild(cloud)
-        }
+        
     }
     
     func spawnBird(){
@@ -443,7 +431,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func resetGame(){
-        player.position = .init(x:0, y:0)
+        if(label.text=="Start Game"){
+            resetGravityOfPhysicsWorldToZero()
+            
+            scoreCount = SKLabelNode(fontNamed: "minecraft")
+            scoreCount.fontSize = 75
+            scoreCount.fontColor = .black
+            scoreCount.position = CGPoint(x: 0, y: 500)
+            scoreCount.horizontalAlignmentMode = .center
+            scoreCount.verticalAlignmentMode = .top
+            scoreCount.text = "0";
+            addChild(scoreCount)
+           
+            player = SKSpriteNode(imageNamed: "fighterJet")
+            player.size = CGSize(width: 150, height: 150)
+            player.physicsBody = SKPhysicsBody(circleOfRadius: 14)
+            player.physicsBody?.affectedByGravity = false
+            player.physicsBody?.isDynamic = true
+            player.physicsBody?.allowsRotation = false;
+            player.position = .init(x:0, y:-200)
+            player.physicsBody?.categoryBitMask = PhysicsCategory.player
+            player.physicsBody?.collisionBitMask = PhysicsCategory.spike
+            player.physicsBody?.contactTestBitMask = PhysicsCategory.spike
+            player.name = "player"
+            
+            addChild(player)
+            
+            label.text="Play Again"
+        }
+        player.position = .init(x:0, y:-300)
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
         cloudSpawn = 0
@@ -455,7 +471,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         speedFall = 1*rampUp
         minS = 0;
         maxS = 5;
-        button.isHidden = true;
+        label.isHidden = true;
+        Pmove = true
+        Bfire = true
         startTimer()
     }
 }

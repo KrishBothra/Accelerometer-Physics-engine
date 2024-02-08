@@ -14,9 +14,9 @@
             filePath = "physicsTest2/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "165"
-            endingLineNumber = "165"
-            landmarkName = "touchesMoved(_:with:)"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "touchMoved(_:with:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -30,8 +30,8 @@
             filePath = "physicsTest2/GameScene.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "96"
-            endingLineNumber = "96"
+            startingLineNumber = "78"
+            endingLineNumber = "78"
             landmarkName = "didMove(to:)"
             landmarkType = "7">
          </BreakpointContent>
