@@ -14,6 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var player = SKSpriteNode()
     var spike = SKSpriteNode()
     var cloud = SKSpriteNode()
+    var bird = SKSpriteNode()
 
     var bullet = SKSpriteNode()
 
@@ -44,6 +45,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let buttonHighlightedTexture = SKTexture(imageNamed: "button_highlighted")
     
     var cloudSpawn = 0
+    var birdSpawn = 0
 
     let screenWidth = UIScreen.main.bounds.width
 
@@ -262,7 +264,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 #endif
         
         bullet.position.y+=10;
-        if bullet.position.y > 500 {
+        if bullet.position.y > 700 {
             bullet.removeFromParent()
         }
         
@@ -325,6 +327,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 cloudSpawn = 0
             }else{
                 cloudSpawn += 1;
+            }
+            
+            if(birdSpawn>=4){
+                spawnBird()
+                birdSpawn = 0
+            }else{
+                birdSpawn += 1;
             }
             
         
@@ -398,11 +407,47 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func spawnBird(){
+        var birdCount = 0;
+        
+        for i in (0..<spikeA.count) {
+            if(spikeA[i].name == "bird"){
+                birdCount += 1;
+            }
+            
+        }
+        
+        if(birdCount<5){
+            let randomNumberC = Int(arc4random_uniform(UInt32(screenWidth*2)-100)) - Int(screenWidth)
+            
+            bird = SKSpriteNode(imageNamed: "cloud")
+            bird.size = CGSize(width: 100, height: 100)
+            bird.physicsBody = SKPhysicsBody(rectangleOf: cloud.size)
+            
+            bird.physicsBody?.affectedByGravity = true
+            bird.physicsBody?.isDynamic = true
+            
+            bird.physicsBody?.categoryBitMask = 0
+            bird.physicsBody?.collisionBitMask = 0
+            bird.physicsBody?.contactTestBitMask = 0
+            
+            bird.position = .init(x:randomNumberC, y:700)
+            bird.zPosition = -1
+            bird.physicsBody?.linearDamping = 5
+            bird.alpha = 0.5
+            bird.name = "cloud";
+            
+            spikeA.append(bird)
+            addChild(bird)
+        }
+    }
+    
     func resetGame(){
         player.position = .init(x:0, y:0)
 //        spike.position = .init(x: 0, y: 200)
         changePos = false;
         cloudSpawn = 0
+        birdSpawn = 0
         score = 0;
         scoreCount.text = String(score)
         backgroundColor = UIColor(red: 0.5, green: 0.5, blue: 1.0, alpha: 1.0)
